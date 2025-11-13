@@ -1,16 +1,28 @@
-import { getWeather } from "./services/weatherService.js";
+import { fetchTemp } from "./services/weatherService.js";
 
-async function showWeather() {
-
+async function displayTemp() {
+    
     try {
-        const data = await getWeather(56.05, 12.70);
-        console.log(data);
-        const temperature = data.current_weather.temperature;
+        // Bearbetar API-info
+        const data = await fetchTemp();
+        const temp = data.current_weather.temperature;
 
-        document.body.innerHTML = `<p>Temperaturen i Helsingborg är: <strong>${temperature}°C</strong></p>`;
-    }    catch (error) {
-        document.body.innerHTML = `<p style="color: red;">Fel: ${error.message}</p>`;
+        // Visas i DOM:
+        // Skapa ett enda <p>-element med ren text
+        const p = document.createElement('p');
+        p.textContent = `Temperatur: ${temp}°C`;
+
+        // Lägg till i body (utan att rensa)
+        document.body.appendChild(p);
+
+    } catch (error) {
+        // Felmeddelande i DOM:
+        const p = document.createElement('p');
+        p.style.color = 'red';
+        p.textContent = `Fel: ${error.message}`;
+        
+        document.body.appendChild(p);
     }
 }
 
-showWeather()
+displayTemp();
